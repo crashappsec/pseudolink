@@ -124,7 +124,7 @@ const char *postfix =
     "    _exit(1);\n"
     "}\n"
     "\n"
-    "__attribute__((constructor)) void\n"
+    "__attribute__((constructor (101))) void\n"
     "pre_main_dyld_dropper(int argc, char **argv, char **envp)\n"
     "{\n"
     "    char **p        = envp;\n"
