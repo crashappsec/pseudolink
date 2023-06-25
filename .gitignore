@@ -1,0 +1,3 @@
+dyld_decls.c
+*.dSYM
+pseudolink
