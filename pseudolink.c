@@ -25,11 +25,12 @@ const char *prefix =
     "#include <string.h>\n"
     "#include <errno.h>\n"
     "#include <sys/stat.h>\n"
+    "#include <libproc.h>\n"
     "\n"
     "#define DYLD_ENVVAR \"DYLD_LIBRARY_PATH\"\n"
     "#define DYLD_PREFIX \"DYLD_LIBRARY_PATH=\"\n"
     "\n"
-    "#define PATHLEN 512\n"
+    "#define PATHLEN PROC_PIDPATHINFO_MAXSIZE\n"
     "\n";
 
 const char *postfix =
@@ -137,7 +138,10 @@ const char *postfix =
     "    found_dir = getenv(DYLD_ENVVAR);\n"
     "\n"
     "    if (exec || !found_dir || strcmp(dyld_dir, found_dir)) { \n"
-    "      execve(argv[0], argv, get_new_envp(envp, sizeof(envp), dyld_dir));\n"
+    "      int pid = getpid();\n"
+    "      char cmdname[PATHLEN];\n"
+    "      proc_pidpath(pid, cmdname, PATHLEN);\n"
+    "      execve(cmdname, argv, get_new_envp(envp, sizeof(envp), dyld_dir));\n"
     "    }\n"
     "    free(dyld_dir);\n"
     "}\n";
